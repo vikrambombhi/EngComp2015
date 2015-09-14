@@ -1,5 +1,10 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
-{\fonttbl}
-{\colortbl;\red255\green255\blue255;}
-\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+public class Main {
+    
+    public static void main(String[] args) {
+        
+        System.out.println("Wing is the best IDE. 11/10");
+        
+    }
+    
 }
+
