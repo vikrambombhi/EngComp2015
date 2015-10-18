@@ -103,13 +103,29 @@ def sumplusplus(img, x, y):
     else:
         return 0
 
-
+def filter_resolution(img):
+    lastpixel = (0, 0)
+    for x, y, col in img:
+        (xL, yL) = lastpixel
+        if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
+            #Inside border
+            if (x >= (3 + xL)) or (y >= (3 + yL)):
+                #Is 1 box width away
+                for x2, y2 in range(-1, 2):
+                    color = get_color(img, (x + x2), (y + y2))
+                    r, g, b = color
+                    if ((r + g + b) // 3 >= 135):
+                        set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
+                    else:
+                        set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
+        lastpixel = (x, y)
+    return img
 
 def final_check(img):
 
     image_value = scan(img)
 
-    if 750<image_value:
+    if 750 < image_value:
         print("Object passes test")
     else:
         print("Object does not passes test")
