@@ -230,6 +230,7 @@ class Image(object):
 
         return Color._make(self.pixels[x, y])
 
+
     def set_color(self, x, y, color):
         """Set the color of the pixel at location (x, y) in this Image,
         to the RGB values stored in Color object, color.
