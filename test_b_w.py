@@ -2,7 +2,9 @@ from Cimpl import *
 
 def black_and_white(img, threshold):
     """ (Cimpl.Image) -> None
-
+    
+    Best threshold is between 60-80
+    
     Convert the specified image to a black-and-white (two-tone) image.
 
     >>> image = load_image(choose_file())
