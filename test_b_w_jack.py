@@ -1,11 +1,10 @@
 from Cimpl import *
 import sys
-sys.setrecursionlimit(990000000)
+sys.setrecursionlimit(10000)
 
-def lower_brightness(img):
+def find_brightness(img):
 
     average_brightness = 0
-    min_brightness = 60
 
     for x, y, col in img:
 
@@ -15,16 +14,33 @@ def lower_brightness(img):
 
         average_brightness += brightness
 
-    average_brightness /= (150*150)
+    average_brightness / (150*150)
+
+    return average_brightness
+
+def lower_brightness(img):
+
+    average_brightness = 0
+
+    for x, y, col in img:
+
+        r, g, b = col
+
+        brightness = (r+g+b) / 3
+
+        average_brightness += brightness
+
+    average_brightness / (150*150)
 
     if average_brightness >= min_brightness:
 
         for x, y, col in img:
 
-            r, g, b = col
+        r, g, b = col
 
-            new_col = create_color((r*(3/4)), (g*(3/4)), (b*(3/4)))
-            set_color(img, x, y, new_col)
+        new_col = create_color((r*(3/4), (g*(3/4), (b*(3/4))
+        set_color(img, x, y, new_col)
+
 
 def black_and_white(img, threshold):
     """ (Cimpl.Image) -> None
@@ -35,10 +51,6 @@ def black_and_white(img, threshold):
     >>> black_and_white(image)
     >>> show(image)
     """
-
-    # Brightness levels range from 0 to 255.
-    # Change the colour of each pixel to black or white, depending on whether
-    # its brightness is in the lower or upper half of this range.
 
     black = create_color(0, 0, 0)
     white = create_color(255, 255, 255)
@@ -53,10 +65,11 @@ def black_and_white(img, threshold):
         else:     # brightness is between threshold and 255, inclusive
             set_color(img, x, y, white)
             number += 1
+    print(number)
 
 
 def scan(img):
-    black_and_white(img, 75)
+    black_and_white(img, 70)
     lst = []
 
     for x, y, col in img:
@@ -103,18 +116,22 @@ def sumplusplus(img, x, y):
     else:
         return 0
 
-
+accepted_value = 900
 
 def final_check(img):
 
+    complete_peice = False
+
     image_value = scan(img)
 
-    if 750<image_value:
-        print("Object passes test")
-    else:
-        print("Object does not passes test")
+    if image_value >= accepted_value:
+        complete_peice = True
 
+
+#image = load_image(choose_file())
+#black_and_white(image, 70)
+#print(scan(image))
+#show(image)
 
 image = load_image(choose_file())
-lower_brightness(image)
-final_check(image)
+find_brightness(image)
