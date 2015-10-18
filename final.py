@@ -1,6 +1,11 @@
 from Cimpl import *
 import sys
+import glob
 sys.setrecursionlimit(990000000)
+
+list_of_image = glob.glob('Data Set/*.bmp'
+for image in list(list_of_image):
+    img = Cimpl.load_image(Cimpl.choose_file(image))
 
 def lower_brightness(img):
 
