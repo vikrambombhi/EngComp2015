@@ -3,9 +3,19 @@ import sys
 sys.setrecursionlimit(990000000)
 
 def lower_brightness(img):
+    """
+    (Cimpl.image) -> none
+
+    Lowers the brigthness of a image if it's average brightness is too high
+
+    >>> image = load_image(choose_file())
+    >>> lower_brightness(image)
+    >>> show(image)
+
+    """
 
     average_brightness = 0
-    min_brightness = 60
+    min_brightness = 55
 
     for x, y, col in img:
 
@@ -23,7 +33,7 @@ def lower_brightness(img):
 
             r, g, b = col
 
-            new_col = create_color((r*(3/4)), (g*(3/4)), (b*(3/4)))
+            new_col = create_color((r*(3/4)), (g*(3/4)), (b*(3/4))) # sets the color as with lower brightness
             set_color(img, x, y, new_col)
 
 def black_and_white(img, threshold):
@@ -122,21 +132,30 @@ def filter_resolution(img):
                         color = get_color(img, (x + x2), (y + y2))
                         r, g, b = color
 
-                        if (((r + g + b) // 3) >= 135):
+                        if (((r + g + b) // 3) >=135):
                             set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
 
                         else:
                             set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
 
-        lastpixel = (x, y)
+            lastpixel = (x, y)
+
 
     return img
 
 def final_check(img):
+    """
+    (Cimpl.image)->none
+
+    Prints if the object is complete or not
+
+    >>> image = load_image(choose_file())
+    >>> final_check(image)
+    """
 
     image_value = scan(img)
 
-    if 750 < image_value:
+    if 750 < image_value < 1300: #experimentally determined accepted value to be between 750<x<1300
         print("Object passes test")
     else:
         print("Object does not passes test")
