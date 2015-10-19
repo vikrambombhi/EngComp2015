@@ -21,11 +21,11 @@ def lower_brightness(img):
 
         r, g, b = col
 
-        brightness = (r+g+b) / 3
+        brightness = (r+g+b) // 3
 
         average_brightness += brightness
 
-    average_brightness /= (150*150)
+    average_brightness //= (150*150)
 
     if average_brightness >= min_brightness:
 
@@ -114,10 +114,23 @@ def sumplusplus(img, x, y):
         return 0
 
 def filter_resolution(img):
+    """
+    (Cimpl.image)->(Cimple.image)
+
+    Creates a more general picture by using the average color to
+    all pixels in 3x3 grid
+
+    >>> image = load_image(choose_file())
+    >>> show(filter_resolution(image))
+
+    """
+
     lastpixel = (0, 0)
 
     for x, y, col in img:
         (xL, yL) = lastpixel
+
+        sum_color = 0
 
         if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
             #Inside border
@@ -132,14 +145,25 @@ def filter_resolution(img):
                         color = get_color(img, (x + x2), (y + y2))
                         r, g, b = color
 
-                        if (((r + g + b) // 3) >=135):
-                            set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
+                        sum_color += ((r + g + b)//3) # will add either 0 or 255
 
-                        else:
-                            set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
+                if(sum_color >= 1275): # 5 or more pixels of out 9 are white, changes all 9 to white
 
-            lastpixel = (x, y)
+                    for x2 in range(-1, 2):
 
+                        for y2 in range(-1, 2):
+
+                        set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
+
+                else: # 5 or more pixels of out 9 are black, changes all 9 to black
+
+                    for x2 in range(-1, 2):
+
+                        for y2 in range(-1, 2):
+
+                    set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
+
+                lastpixel = (x, y)
 
     return img
 
@@ -163,4 +187,8 @@ def final_check(img):
 
 image = load_image(choose_file())
 lower_brightness(image)
-final_check(image)
+black_and_white(image, 75)
+show(image)
+filter_resolution(image)
+show(image)
+#final_check(image)
