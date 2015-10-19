@@ -7,7 +7,7 @@ list_of_image = glob.glob('Data Set/*.bmp')
 list_of_image = [s.replace('Data Set\\', '') for s in list_of_image]
 result = []
 for image in list(list_of_image):
-    path = 'C:/Users/Vikram/Documents/GitHub/EngComp2015/Data Set\%s' % image
+    path = 'Data Set/%s' % image
     img = Cimpl.load_image(path)
 
     def lower_brightness(img):
@@ -62,7 +62,6 @@ for image in list(list_of_image):
                 set_color(img, x, y, white)
                 number += 1
 
-
     def scan(img):
         black_and_white(img, 75)
         lst = []
@@ -81,7 +80,6 @@ for image in list(list_of_image):
         return largest
 
     green_color = create_color(0, 255, 0)
-
 
     def sumplusplus(img, x, y):
         col = get_color(img, x, y)
@@ -111,6 +109,57 @@ for image in list(list_of_image):
         else:
             return 0
 
+    def filter_resolution(img):
+        """
+        (Cimpl.image)->(Cimple.image)
+        Creates a more general picture by using the average color to
+        all pixels in 3x3 grid
+        >>> image = load_image(choose_file())
+        >>> show(filter_resolution(image))
+        """
+
+        lastpixel = (0, 0)
+
+        for x, y, col in img:
+            (xL, yL) = lastpixel
+
+            sum_color = 0
+
+            if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
+                #Inside border
+
+                if (x >= (3 + xL)) or (y >= (3 + yL)):
+                    #Is 1 box width away
+
+                    for x2 in range(-1, 2):
+
+                        for y2 in range(-1, 2):
+
+                            color = get_color(img, (x + x2), (y + y2))
+                            r, g, b = color
+
+                            sum_color += ((r + g + b)//3) # will add either 0 or 255
+
+                    if(sum_color >= 1275): # 5 or more pixels of out 9 are white, changes all 9 to white
+
+                        for x2 in range(-1, 2):
+
+                            for y2 in range(-1, 2):
+                                new_color = create_color(255, 255, 255)
+                                set_color(img, (x + x2), (y + y2), new_color)
+
+                    else: # 5 or more pixels of out 9 are black, changes all 9 to black
+
+                        for x2 in range(-1, 2):
+
+                            for y2 in range(-1, 2):
+                                new_color = create_color(0, 0, 0)
+                                set_color(img, (x + x2), (y + y2), new_color)
+
+                    lastpixel = (x, y)
+
+        return img
+
     def final_check(img):
 
         image_value = scan(img)
@@ -119,7 +168,6 @@ for image in list(list_of_image):
             return 'Pass'
         else:
             return 'Fail'
-
 
     lower_brightness(img)
     ans = final_check(img)
