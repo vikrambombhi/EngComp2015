@@ -152,16 +152,16 @@ def filter_resolution(img):
                     for x2 in range(-1, 2):
 
                         for y2 in range(-1, 2):
-
-                        set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
+                            new_color = create_color(255, 255, 255)
+                            set_color(img, (x + x2), (y + y2), new_color)
 
                 else: # 5 or more pixels of out 9 are black, changes all 9 to black
 
                     for x2 in range(-1, 2):
 
                         for y2 in range(-1, 2):
-
-                    set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
+                            new_color = create_color(0, 0, 0)
+                            set_color(img, (x + x2), (y + y2), new_color)
 
                 lastpixel = (x, y)
 
