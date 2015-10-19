@@ -5,8 +5,9 @@ import glob
 sys.setrecursionlimit(990000000)
 list_of_image = glob.glob('Data Set/*.bmp')
 list_of_image = [s.replace('Data Set\\', '') for s in list_of_image]
+
 for image in list(list_of_image):
-    path = 'C:/Users/Vikram/Documents/GitHub/EngComp2015/\%s' % image
+    path = 'C:/Users/Vikram/Documents/GitHub/EngComp2015/Data Set\%s' % image
     img = Cimpl.load_image(path)
 
     def lower_brightness(img):
@@ -109,7 +110,7 @@ for image in list(list_of_image):
             return sump
         else:
             return 0
-
+"""
     def filter_resolution(img):
         lastpixel = (0, 0)
         for x, y, col in img:
@@ -127,7 +128,7 @@ for image in list(list_of_image):
                             set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
             lastpixel = (x, y)
         return img
-
+"""
     def final_check(img):
 
         image_value = scan(img)
