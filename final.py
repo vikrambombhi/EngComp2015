@@ -1,141 +1,142 @@
 from Cimpl import *
+import Cimpl
 import sys
 import glob
 sys.setrecursionlimit(990000000)
-
-list_of_image = glob.glob('Data Set/*.bmp'
+list_of_image = glob.glob('Data Set/*.bmp')
+list_of_image = [s.replace('Data Set\\', '') for s in list_of_image]
 for image in list(list_of_image):
-    img = Cimpl.load_image(Cimpl.choose_file(image))
+    path = 'C:/Users/Vikram/Documents/GitHub/EngComp2015/\%s' % image
+    img = Cimpl.load_image(path)
 
-def lower_brightness(img):
+    def lower_brightness(img):
 
-    average_brightness = 0
-    min_brightness = 60
-
-    for x, y, col in img:
-
-        r, g, b = col
-
-        brightness = (r+g+b) / 3
-
-        average_brightness += brightness
-
-    average_brightness /= (150*150)
-
-    if average_brightness >= min_brightness:
+        average_brightness = 0
+        min_brightness = 60
 
         for x, y, col in img:
 
             r, g, b = col
 
-            new_col = create_color((r*(3/4)), (g*(3/4)), (b*(3/4)))
-            set_color(img, x, y, new_col)
+            brightness = (r+g+b) / 3
 
-def black_and_white(img, threshold):
-    """ (Cimpl.Image) -> None
+            average_brightness += brightness
 
-    Convert the specified image to a black-and-white (two-tone) image.
+        average_brightness /= (150*150)
 
-    >>> image = load_image(choose_file())
-    >>> black_and_white(image)
-    >>> show(image)
-    """
+        if average_brightness >= min_brightness:
 
-    # Brightness levels range from 0 to 255.
-    # Change the colour of each pixel to black or white, depending on whether
-    # its brightness is in the lower or upper half of this range.
+            for x, y, col in img:
 
-    black = create_color(0, 0, 0)
-    white = create_color(255, 255, 255)
-    number = 0
-    for x, y, col in img:
-        red, green, blue = col
+                r, g, b = col
 
-        brightness = (red + green + blue) // 3
+                new_col = create_color((r*(3/4)), (g*(3/4)), (b*(3/4)))
+                set_color(img, x, y, new_col)
 
-        if brightness < threshold:
-            set_color(img, x, y, black)
-        else:     # brightness is between threshold and 255, inclusive
-            set_color(img, x, y, white)
-            number += 1
+    def black_and_white(img, threshold):
+        """ (Cimpl.Image) -> None
 
+        Convert the specified image to a black-and-white (two-tone) image.
 
-def scan(img):
-    black_and_white(img, 75)
-    lst = []
+        >>> image = load_image(choose_file())
+        >>> black_and_white(image)
+        >>> show(image)
+        """
 
-    for x, y, col in img:
-        red, green, blue = col
-        if (x > 10) and (x < 140) and (y > 10) and (y < 140):
-            if red == 255:
-                lst.append(sumplusplus(img, x, y))
+        # Brightness levels range from 0 to 255.
+        # Change the colour of each pixel to black or white, depending on whether
+        # its brightness is in the lower or upper half of this range.
 
-    largest = 0
-    for number in lst:
-        if largest <= number:
-            largest = number
+        black = create_color(0, 0, 0)
+        white = create_color(255, 255, 255)
+        number = 0
+        for x, y, col in img:
+            red, green, blue = col
 
-    return largest
+            brightness = (red + green + blue) // 3
 
-green_color = create_color(0, 255, 0)
+            if brightness < threshold:
+                set_color(img, x, y, black)
+            else:     # brightness is between threshold and 255, inclusive
+                set_color(img, x, y, white)
+                number += 1
 
 
-def sumplusplus(img, x, y):
-    col = get_color(img, x, y)
-    r, g, b = col
-    if r == 255:
-        sump = 0
-        set_color(img, x, y, green_color)
-        sump += 1
-        if x + 1 < 150:
-            sump += sumplusplus(img, x + 1, y)
+    def scan(img):
+        black_and_white(img, 75)
+        lst = []
+
+        for x, y, col in img:
+            red, green, blue = col
+            if (x > 10) and (x < 140) and (y > 10) and (y < 140):
+                if red == 255:
+                    lst.append(sumplusplus(img, x, y))
+
+        largest = 0
+        for number in lst:
+            if largest <= number:
+                largest = number
+
+        return largest
+
+    green_color = create_color(0, 255, 0)
+
+
+    def sumplusplus(img, x, y):
+        col = get_color(img, x, y)
+        r, g, b = col
+        if r == 255:
+            sump = 0
+            set_color(img, x, y, green_color)
+            sump += 1
+            if x + 1 < 150:
+                sump += sumplusplus(img, x + 1, y)
+                if y + 1 < 150:
+                    sump += sumplusplus(img, x + 1, y + 1)
+                if y - 1 > 0:
+                    sump += sumplusplus(img, x + 1, y - 1)
+            if x - 1 > 0:
+                sump += sumplusplus(img, x - 1, y)
+                if y + 1 < 150:
+                    sump += sumplusplus(img, x - 1, y - 1)
+                if y - 1 > 0:
+                    sump += sumplusplus(img, x - 1, y + 1)
             if y + 1 < 150:
-                sump += sumplusplus(img, x + 1, y + 1)
+                sump += sumplusplus(img, x, y + 1)
             if y - 1 > 0:
-                sump += sumplusplus(img, x + 1, y - 1)
-        if x - 1 > 0:
-            sump += sumplusplus(img, x - 1, y)
-            if y + 1 < 150:
-                sump += sumplusplus(img, x - 1, y - 1)
-            if y - 1 > 0:
-                sump += sumplusplus(img, x - 1, y + 1)
-        if y + 1 < 150:
-            sump += sumplusplus(img, x, y + 1)
-        if y - 1 > 0:
-            sump += sumplusplus(img, x, y - 1)
+                sump += sumplusplus(img, x, y - 1)
 
-        return sump
-    else:
-        return 0
+            return sump
+        else:
+            return 0
 
-def filter_resolution(img):
-    lastpixel = (0, 0)
-    for x, y, col in img:
-        (xL, yL) = lastpixel
-        if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
-            #Inside border
-            if (x >= (3 + xL)) or (y >= (3 + yL)):
-                #Is 1 box width away
-                for x2, y2 in range(-1, 2):
-                    color = get_color(img, (x + x2), (y + y2))
-                    r, g, b = color
-                    if ((r + g + b) // 3 >= 135):
-                        set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
-                    else:
-                        set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
-        lastpixel = (x, y)
-    return img
+    def filter_resolution(img):
+        lastpixel = (0, 0)
+        for x, y, col in img:
+            (xL, yL) = lastpixel
+            if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
+                #Inside border
+                if (x >= (3 + xL)) or (y >= (3 + yL)):
+                    #Is 1 box width away
+                    for x2, y2 in range(-1, 2):
+                        color = get_color(img, (x + x2), (y + y2))
+                        r, g, b = color
+                        if ((r + g + b) // 3 >= 135):
+                            set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
+                        else:
+                            set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
+            lastpixel = (x, y)
+        return img
 
-def final_check(img):
+    def final_check(img):
 
-    image_value = scan(img)
+        image_value = scan(img)
 
-    if 750 < image_value:
-        print("Object passes test")
-    else:
-        print("Object does not passes test")
+        if 750 < image_value:
+            print("Object passes test")
+        else:
+            print("Object does not passes test")
 
 
-image = load_image(choose_file())
-lower_brightness(image)
-final_check(image)
+    lower_brightness(img)
+    final_check(img)
