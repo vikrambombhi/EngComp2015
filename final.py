@@ -64,6 +64,10 @@ for image in list(list_of_image):
 
 
     def scan(img):
+        """(Cimpl.Image) -> (Int)
+
+        Scans image for white pixels in chunks, returning the size of the largest chunk in pixls.
+        """
         black_and_white(img, 75)
         lst = []
 
