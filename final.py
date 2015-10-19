@@ -5,7 +5,7 @@ import glob
 sys.setrecursionlimit(990000000)
 list_of_image = glob.glob('Data Set/*.bmp')
 list_of_image = [s.replace('Data Set\\', '') for s in list_of_image]
-
+result = []
 for image in list(list_of_image):
     path = 'C:/Users/Vikram/Documents/GitHub/EngComp2015/Data Set\%s' % image
     img = Cimpl.load_image(path)
@@ -19,11 +19,11 @@ for image in list(list_of_image):
 
             r, g, b = col
 
-            brightness = (r+g+b) / 3
+            brightness = (r+g+b) // 3
 
             average_brightness += brightness
 
-        average_brightness /= (150*150)
+        average_brightness //= (150*150)
 
         if average_brightness >= min_brightness:
 
@@ -64,10 +64,6 @@ for image in list(list_of_image):
 
 
     def scan(img):
-        """(Cimpl.Image) -> (Int)
-
-        Scans image for white pixels in chunks, returning the size of the largest chunk in pixls.
-        """
         black_and_white(img, 75)
         lst = []
 
@@ -114,34 +110,18 @@ for image in list(list_of_image):
             return sump
         else:
             return 0
-"""
-    def filter_resolution(img):
-        lastpixel = (0, 0)
-        for x, y, col in img:
-            (xL, yL) = lastpixel
-            if (x >= 10 and x <= 140) and (y >= 10 and x <= 140):
-                #Inside border
-                if (x >= (3 + xL)) or (y >= (3 + yL)):
-                    #Is 1 box width away
-                    for x2, y2 in range(-1, 2):
-                        color = get_color(img, (x + x2), (y + y2))
-                        r, g, b = color
-                        if ((r + g + b) // 3 >= 135):
-                            set_color(img, (x + x2), (y + y2), create_color(255, 255, 255))
-                        else:
-                            set_color(img, (x + x2), (y + y2), create_color(0, 0, 0))
-            lastpixel = (x, y)
-        return img
-"""
+
     def final_check(img):
 
         image_value = scan(img)
 
-        if 750 < image_value:
-            print("Object passes test")
+        if 750 < image_value < 1300:
+            return 'Pass'
         else:
-            print("Object does not passes test")
+            return 'Fail'
 
 
     lower_brightness(img)
-    final_check(img)
+    ans = final_check(img)
+    result.append('%s = %s' % (image, ans))
+print(result)
