@@ -63,6 +63,10 @@ for image in list(list_of_image):
                 number += 1
 
     def scan(img):
+        """(Cimpl.Image) -> (Int)
+
+        Scans image for white pixel chunks. Returns the size of the largest chunk.
+        """
         black_and_white(img, 75)
         lst = []
 
@@ -82,6 +86,10 @@ for image in list(list_of_image):
     green_color = create_color(0, 255, 0)
 
     def sumplusplus(img, x, y):
+        """(Cimpl.Image, Int, Int) -> (Int)
+
+        Recursively determines the size of a chunk in pixels.
+        """
         col = get_color(img, x, y)
         r, g, b = col
         if r == 255:
