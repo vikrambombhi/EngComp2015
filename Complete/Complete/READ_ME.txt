@@ -1,0 +1,1 @@
+Run Main.py using python 3.4 or higher. All results will be saved in Results.txt
